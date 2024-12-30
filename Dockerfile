@@ -44,10 +44,6 @@ FROM cardinal-base AS cardinal-clone
 # COPY . /cardinal    
 WORKDIR /cardinal-build
 
-
-
-RUN curl https://anl.box.com/shared/static/uhbxlrx7hvxqw27psymfbhi7bx7s6u6a.xz  
-
 RUN git clone --branch custom_scripts git@github.com:magnoxemo/cardinal.git
 FROM cardinal-clone AS cardinal-deps
 
