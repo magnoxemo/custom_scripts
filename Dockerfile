@@ -40,16 +40,20 @@ RUN apt-get update --yes && \
         python3-pkgconfig\
         curl 
 FROM cardinal-base AS cardinal-clone
-
 # COPY . /cardinal    
 WORKDIR /cardinal-build
 
-RUN git clone --branch custom_scripts git@github.com:magnoxemo/cardinal.git
+RUN git clone --branch custom_scripts https://github.com/magnoxemo/cardinal.git
 FROM cardinal-clone AS cardinal-deps
 
 WORKDIR /cardinal-build/cardinal
 
 ENV LIBMESH_JOBS=16
+
+RUN git config --file .gitmodules submodule.contrib/moose.url https://github.com/magnoxemo/moose.git &&\
+    git submodule sync && \
+    git submodule update --init contrib/moose
+
 
 RUN ./scripts/get-dependencies.sh && \
     ./contrib/moose/scripts/update_and_rebuild_petsc.sh && \
@@ -67,4 +71,3 @@ RUN export NEKRS_HOME=/cardinal-build/cardinal/install && \
 
 #docker build -t cardinal-build .
 #docker run -it -v  cardinal-build
-
