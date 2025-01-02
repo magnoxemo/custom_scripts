@@ -58,7 +58,10 @@ RUN git config --file .gitmodules submodule.contrib/moose.url https://github.com
 RUN ./scripts/get-dependencies.sh && \
     ./contrib/moose/scripts/update_and_rebuild_petsc.sh && \
     ./contrib/moose/scripts/update_and_rebuild_libmesh.sh && \
-    ./contrib/moose/scripts/update_and_rebuild_wasp.sh 
+    ./contrib/moose/scripts/update_and_rebuild_wasp.sh && \
+    ./scripts/download-openmc-cross-sections.sh 
+
+ENV OPENMC_CROSS_SECTIONS=/cardinal-build/cross_sections/endfb-vii.1-hdf5/cross_sections.xml
 
 FROM cardinal-deps AS cardinal-build
 
