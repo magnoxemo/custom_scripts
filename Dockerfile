@@ -61,14 +61,18 @@ RUN ./scripts/get-dependencies.sh && \
     ./contrib/moose/scripts/update_and_rebuild_wasp.sh && \
     ./scripts/download-openmc-cross-sections.sh 
 
-ENV OPENMC_CROSS_SECTIONS=/cardinal-build/cross_sections/endfb-vii.1-hdf5/cross_sections.xml
-
 FROM cardinal-deps AS cardinal-build
 
 WORKDIR /cardinal-build/cardinal
 
 RUN export NEKRS_HOME=/cardinal-build/cardinal/install && \
-    make -j8
+    export CC=mpicc  && \
+    export CXX=mpicxx  && \
+    export FC=mpif90  && \
+    export OPENMC_CROSS_SECTIONS=${HOME}/cross_sections/endfb-vii.1-hdf5/cross_sections.xml 
+
+RUN make -j32
+
 
 
 
