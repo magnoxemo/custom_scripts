@@ -1,19 +1,3 @@
-# Build and install Cardinal in a Docker image without conda
-#
-# Divided into the following targets:
-#
-# cardinal-base: starting from an Ubuntu 24.04 image:
-#     * installs all required packages
-#
-# cardinal-clone:
-#     * clone cardinal repo
-#
-# cardinal-deps:
-#     * run the get-dependency script
-#
-# cardinal-build:
-#     * make cardinal using specific environment variables
-#
 FROM ubuntu:24.04 AS cardinal-base
 
 # Install necessary dependencies
@@ -69,12 +53,13 @@ RUN export NEKRS_HOME=/cardinal-build/cardinal/install && \
     export CC=mpicc  && \
     export CXX=mpicxx  && \
     export FC=mpif90  && \
-    export OPENMC_CROSS_SECTIONS=${HOME}/cross_sections/endfb-vii.1-hdf5/cross_sections.xml 
+ 
 
 RUN make -j32
 
-
+RUN cd contrib/openmc &&\
+    pip install . 
 
 
 #docker build -t cardinal-build .
-#docker run -it -v  cardinal-build
+#docker run -v $PWD:/cardinal-build -it   cardinal-build
