@@ -27,7 +27,7 @@ FROM cardinal-base AS cardinal-clone
 # COPY . /cardinal    
 WORKDIR /cardinal-build
 
-RUN git clone --branch custom_scripts https://github.com/magnoxemo/cardinal.git
+RUN git clone --branch mesh_tally_amalgamation https://github.com/magnoxemo/cardinal.git
 FROM cardinal-clone AS cardinal-deps
 
 WORKDIR /cardinal-build/cardinal
@@ -35,6 +35,7 @@ WORKDIR /cardinal-build/cardinal
 ENV LIBMESH_JOBS=16
 
 RUN git config --file .gitmodules submodule.contrib/moose.url https://github.com/magnoxemo/moose.git &&\
+    git config --file .gitmodules submodule.contrib/moose.branch element_amalgamation  && \
     git submodule sync && \
     git submodule update --init contrib/moose
 
