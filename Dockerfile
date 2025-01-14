@@ -50,7 +50,7 @@ FROM cardinal-deps AS cardinal-build
 
 WORKDIR /cardinal-build/cardinal
 
-RUN export NEKRS_HOME=/cardinal-build/cardinal/install && \
+RUN export NEKRS_HOME=~/cardinal-build/cardinal/install && \
     export CC=mpicc  && \
     export CXX=mpicxx  && \
     export FC=mpif90  && \
