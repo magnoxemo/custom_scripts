@@ -2,8 +2,9 @@ import argparse
 import os
 
 _parser = argparse.ArgumentParser()
-_parser.add_argument("--cpp", help=" name of the cpp src file ")
-_parser.add_argument("--exe", help=" name of the cpp exe file ")
+_parser.add_argument("--cpp", help = " name of the cpp src file ")
+_parser.add_argument("--exe", help = " name of the cpp exe file ")
+_parser.add_argument("--rebuild", help = "If the program needs to be rebuild",default = False)
 
 _libmesh_include_path = "/home/ebny_walid/libmesh_opt/include"
 _libmesh_link_path = "/home/ebny_walid/libmesh_opt/lib"
@@ -23,6 +24,24 @@ _run_command = (
 )
 
 _executable_command = "./" +_args.exe
-os.system(_run_command)
-os.system(_executable_command)
+
+if os.path.exists(_args.exe) and _args.rebuild :
+    print("===================================================")
+    print("=== removing existing executable and rebuilding ===")
+    print("===================================================")
+    os.system(f"rm {_args.exe}")
+    os.system(_run_command)
+    print(f"running the new {_args.exe}")
+    os.system(_executable_command)
+else:
+    if os.path.exists(_args.exe):
+        os.system(_executable_command)
+    else:
+        print( "===================================================")
+        print(f"=====  {_args.exe} doesn't exists so building it   =======")
+        print( "===================================================")
+        os.system(_run_command)
+        os.system(_executable_command)
+
+
 
