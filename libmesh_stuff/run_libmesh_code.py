@@ -32,12 +32,11 @@ if os.path.exists(_args.exe) and _args.rebuild :
     print("===================================================")
     os.system(f"rm {_args.exe}")
     os.system(_run_command)
-
     if os.path.exists(_args.exe):
             print(f"running the new {_args.exe}")
             os.system(_executable_command)
     else:
-        raise Exception (f"{_args.cpp} file didn't compile. See the compile message and fix them.")
+        raise Exception (f"\n\n\n{_args.cpp} file didn't compile. See the compile message and fix them.")
 else:
     if os.path.exists(_args.exe):
         os.system(_executable_command)
@@ -46,7 +45,9 @@ else:
         print(f"=====  {_args.exe} doesn't exists so building it   =======")
         print( "===================================================")
         os.system(_run_command)
-        os.system(_executable_command)
-
-
+        if os.path.exists(_args.exe):
+            print(f"running the new {_args.exe}")
+            os.system(_executable_command)
+        else:
+            raise Exception (f"\n\n\n{_args.cpp} file didn't compile. See the compile message and fix them.")
 
