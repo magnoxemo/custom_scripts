@@ -4,7 +4,7 @@ import os
 _parser = argparse.ArgumentParser()
 _parser.add_argument("--cpp", help = " name of the cpp src file ")
 _parser.add_argument("--exe", help = " name of the cpp exe file ")
-_parser.add_argument("--rebuild", help = "If the program needs to be rebuild",default = False)
+_parser.add_argument("--rebuild", help = "If the program needs to be rebuild",default = True)
 _parser.add_argument("--dbg",help = " Debugger mode",default = False)
 
 _libmesh_include_path = "/home/ebny_walid/libmesh_opt/include"
