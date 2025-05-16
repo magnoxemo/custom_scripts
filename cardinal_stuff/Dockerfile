@@ -1,6 +1,8 @@
 FROM ubuntu:24.04 AS cardinal-base
 
-# Install necessary dependencies
+ARG BRANCH_NAME="devel"
+ARG BUILD_METHOD="opt"
+
 RUN apt-get update --yes && \
     apt-get install --yes \
         git \
@@ -22,23 +24,19 @@ RUN apt-get update --yes && \
         python3-jinja2 \
         python3-yaml \
         python3-pkgconfig\
-        curl 
+        curl \
+        nano \
+
 FROM cardinal-base AS cardinal-clone
-# COPY . /cardinal    
+
 WORKDIR /cardinal-build
 
-RUN git clone --branch mesh_tally_amalgamation https://github.com/magnoxemo/cardinal.git
+RUN git clone --branch ${BRANCH_NAME} https://github.com/magnoxemo/cardinal.git
 FROM cardinal-clone AS cardinal-deps
 
 WORKDIR /cardinal-build/cardinal
 
 ENV LIBMESH_JOBS=16
-
-RUN git config --file .gitmodules submodule.contrib/moose.url https://github.com/magnoxemo/moose.git &&\
-    git config --file .gitmodules submodule.contrib/moose.branch element_amalgamation  && \
-    git submodule sync && \
-    git submodule update --init contrib/moose
-
 
 RUN ./scripts/get-dependencies.sh && \
     ./contrib/moose/scripts/update_and_rebuild_petsc.sh && \
@@ -56,11 +54,8 @@ RUN export NEKRS_HOME=~/cardinal-build/cardinal/install && \
     export FC=mpif90  && \
  
 
-RUN make -j32
+RUN make -j12 METHOD=${BUILD_METHOD}
 
 RUN cd contrib/openmc &&\
     pip install . 
 
-
-#docker build -t cardinal-build .
-#docker run -v $PWD:/cardinal-build -it   cardinal-build
