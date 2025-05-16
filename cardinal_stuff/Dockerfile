@@ -45,7 +45,7 @@ RUN ./scripts/get-dependencies.sh && \
 
 WORKDIR /cardinal-build/cardinal
 
-ENV NEKRS_HOME=~/cardinal-build/cardinal/install 
+ENV NEKRS_HOME=/cardinal-build/cardinal/install 
 ENV CC=mpicc 
 ENV CXX=mpicxx  
 ENV FC=mpif90 
