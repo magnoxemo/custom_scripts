@@ -57,5 +57,6 @@ RUN export NEKRS_HOME=~/cardinal-build/cardinal/install && \
 RUN make -j12 METHOD=${BUILD_METHOD}
 
 RUN cd contrib/openmc &&\
-    pip install . 
+    pip install . --break-system-packages
+
 
