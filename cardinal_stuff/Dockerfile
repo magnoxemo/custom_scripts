@@ -1,4 +1,4 @@
-FROM ubuntu:24.04 AS cardinal-base
+FROM ubuntu:24.04 
 
 ARG BRANCH_NAME="devel"
 ARG BUILD_METHOD="opt"
@@ -25,18 +25,16 @@ RUN apt-get update --yes && \
         python3-yaml \
         python3-pkgconfig\
         curl \
-        nano \
+        nano 
 
-FROM cardinal-base AS cardinal-clone
 
 WORKDIR /cardinal-build
 
 RUN git clone --branch ${BRANCH_NAME} https://github.com/magnoxemo/cardinal.git
-FROM cardinal-clone AS cardinal-deps
 
 WORKDIR /cardinal-build/cardinal
 
-ENV LIBMESH_JOBS=16
+ENV LIBMESH_JOBS=30
 
 RUN ./scripts/get-dependencies.sh && \
     ./contrib/moose/scripts/update_and_rebuild_petsc.sh && \
@@ -44,19 +42,17 @@ RUN ./scripts/get-dependencies.sh && \
     ./contrib/moose/scripts/update_and_rebuild_wasp.sh && \
     ./scripts/download-openmc-cross-sections.sh 
 
-FROM cardinal-deps AS cardinal-build
 
 WORKDIR /cardinal-build/cardinal
 
-RUN export NEKRS_HOME=~/cardinal-build/cardinal/install && \
-    export CC=mpicc  && \
-    export CXX=mpicxx  && \
-    export FC=mpif90  && \
+ENV NEKRS_HOME=/cardinal-build/cardinal/install 
+ENV CC=mpicc 
+ENV CXX=mpicxx  
+ENV FC=mpif90 
  
 
 RUN make -j12 METHOD=${BUILD_METHOD}
 
 RUN cd contrib/openmc &&\
     pip install . --break-system-packages
-
-
+ENV OPENMC_CROSS_SECTIONS=$PWD/../cross_sections/endfb-vii.1-hdf5/cross_sections.xml
