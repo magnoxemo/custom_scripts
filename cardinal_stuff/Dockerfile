@@ -55,4 +55,4 @@ RUN make -j12 METHOD=${BUILD_METHOD}
 
 RUN cd contrib/openmc &&\
     pip install . --break-system-packages
-ENV OPENMC_CROSS_SECTIONS=$PWD/../cross_sections/endfb-vii.1-hdf5/cross_sections.xml
+ENV OPENMC_CROSS_SECTIONS=$PWD/../cross_sections/endfb-viii-hdf5/cross_sections.xml
