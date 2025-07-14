@@ -22,7 +22,8 @@ class MeshData:
     def interpolate(self):
         interpolator = scipy.interpolate.RBFInterpolator(
             numpy.column_stack((self.x_coordinate, self.y_coordinate, self.z_coordinate)),
-            self.metric_variable_data)
+            self.metric_variable_data
+        )
         return interpolator
 
 
@@ -38,15 +39,21 @@ class CalculateDiscrepancyMatrix:
         mesh_amalgamation = self.amr_with_mesh_amalgamation_rbf(numpy.column_stack((x, y, z)))
         return (amr - mesh_amalgamation) / amr
 
-    def plot_data(self, n_points=1000):
+    def plot_data(self, project_random_point=True, n_points=1000):
         cmap = cm.viridis
         fig = plt.figure(figsize=(10, 8))
         ax = fig.add_subplot(111, projection='3d')
 
-        # random points in the domain
-        x_ = np.random.uniform(numpy.min(self.amr.x_coordinate), numpy.max(self.amr.x_coordinate), n_points)
-        y_ = np.random.uniform(numpy.min(self.amr.y_coordinate), numpy.max(self.amr.y_coordinate), n_points)
-        z_ = np.random.uniform(numpy.min(self.amr.z_coordinate), numpy.max(self.amr.z_coordinate), n_points)
+        if project_random_point:
+            # random points in the domain
+            x_ = np.random.uniform(numpy.min(self.amr.x_coordinate), numpy.max(self.amr.x_coordinate), n_points)
+            y_ = np.random.uniform(numpy.min(self.amr.y_coordinate), numpy.max(self.amr.y_coordinate), n_points)
+            z_ = np.random.uniform(numpy.min(self.amr.z_coordinate), numpy.max(self.amr.z_coordinate), n_points)
+        else:
+            x_ = self.amr.x_coordinate
+            y_ = self.amr.y_coordinate
+            z_ = self.amr.z_coordinate
+
         value = self.get_discrepancy_matrix(x_, y_, z_)
         ax.scatter(x_, y_, z_, facecolors=cm.viridis(value), linewidth=0)
 
@@ -55,6 +62,6 @@ class CalculateDiscrepancyMatrix:
         ax.set_zlabel('Z-axis')
 
         m = cm.ScalarMappable(cmap=cmap)
-        m.set_array(value)
-        fig.colorbar(m, shrink=0.5, aspect=10, label='Value (Val)')
+        fig.colorbar(m, aspect=10, label=f'{self.amr.variable_name}_discrepancy')
         plt.show()
+
