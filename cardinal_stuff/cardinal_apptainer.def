@@ -1,0 +1,64 @@
+Bootstrap: docker
+From: ubuntu:24.04
+
+%environment
+
+    export LIBMESH_JOBS=20
+    export NEKRS_HOME=/opt/cardinal/install
+    export CC=mpicc
+    export CXX=mpicxx
+    export FC=mpif90
+    export OPENMC_CROSS_SECTIONS=/opt/cardinal-build/cross_sections/endfb-vii.1-hdf5/cross_sections.xml
+
+%post
+
+
+    : "${REPO:=https://github.com/magnoxemo/cardinal.git}"
+    : "${BRANCH:=devel}"
+    : "${DOWNLOAD_OPENMC_CROSS_SECTION:=true}"
+    : "${BUILD_METHOD:=opt}"
+
+
+    apt-get update -y && \
+    apt-get install --yes \
+        git \
+        make \
+        autoconf \
+        automake \
+        libtool \
+        flex \
+        bison \
+        cmake \
+        g++ \
+        gfortran \
+        libhdf5-dev \
+        mpich \
+        libtirpc-dev \
+        python3 \
+        python3-pip \
+        python3-packaging \
+        python3-jinja2 \
+        python3-yaml \
+        python3-pkgconfig \
+        curl \
+        nano
+
+    mkdir -p /opt/cardinal-build && cd /opt/cardinal-build
+
+    git clone --branch $BRANCH $REPO
+    cd cardinal
+
+    ./scripts/get-dependencies.sh
+    ./contrib/moose/scripts/update_and_rebuild_petsc.sh
+    ./contrib/moose/scripts/update_and_rebuild_libmesh.sh
+    ./contrib/moose/scripts/update_and_rebuild_wasp.sh
+
+    if [ ${DOWNLOAD_OPENMC_CROSS_SECTION} == "true" ]; then
+        ./scripts/download-openmc-cross-sections.sh
+    fi
+
+    make -j 12 METHOD=${BUILD_METHOD}
+
+    cd contrib/openmc && \
+    pip install . --break-system-packages  
+     
