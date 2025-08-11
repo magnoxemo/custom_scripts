@@ -3,21 +3,32 @@ From: ubuntu:24.04
 
 %environment
 
+    #If I need to recompile it 
     export LIBMESH_JOBS=20
-    export NEKRS_HOME=/opt/cardinal/install
+    export MOOSE_JOBS=20
+    export JOBS=20
+    export NEKRS_HOME=/opt/cardinal-build/cardinal/install
     export CC=mpicc
     export CXX=mpicxx
     export FC=mpif90
     export OPENMC_CROSS_SECTIONS=/opt/cardinal-build/cross_sections/endfb-vii.1-hdf5/cross_sections.xml
 
 %post
-
-
     : "${REPO:=https://github.com/magnoxemo/cardinal.git}"
     : "${BRANCH:=devel}"
-    : "${DOWNLOAD_OPENMC_CROSS_SECTION:=true}"
+    : "${DOWNLOAD_OPENMC_CROSS_SECTION:=false}"
     : "${BUILD_METHOD:=opt}"
 
+    #for build time compilation
+
+    export LIBMESH_JOBS=20
+    export MOOSE_JOBS=20
+    export JOBS=20
+    export NEKRS_HOME=/opt/cardinal-build/cardinal/install
+    export CC=mpicc
+    export CXX=mpicxx
+    export FC=mpif90
+    export OPENMC_CROSS_SECTIONS=/opt/cardinal-build/cross_sections/endfb-vii.1-hdf5/cross_sections.xml
 
     apt-get update -y && \
     apt-get install --yes \
@@ -53,12 +64,13 @@ From: ubuntu:24.04
     ./contrib/moose/scripts/update_and_rebuild_libmesh.sh
     ./contrib/moose/scripts/update_and_rebuild_wasp.sh
 
-    if [ ${DOWNLOAD_OPENMC_CROSS_SECTION} == "true" ]; then
+    if [ ${DOWNLOAD_OPENMC_CROSS_SECTION} = "true" ]; then
         ./scripts/download-openmc-cross-sections.sh
     fi
 
     make -j 12 METHOD=${BUILD_METHOD}
 
+    # installing openmc API.
+    # Also I don't care 
     cd contrib/openmc && \
     pip install . --break-system-packages  
-     
