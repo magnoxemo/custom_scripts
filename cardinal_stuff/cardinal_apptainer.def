@@ -11,12 +11,9 @@ From: ubuntu:24.04
     export CC=mpicc
     export CXX=mpicxx
     export FC=mpif90
+    export OPENMC_CROSS_SECTIONS=/opt/cardinal-build/cross_sections/endfb-viii.0-hdf5i/cross_sections.xml
 
 %post
-    : "${REPO:=https://github.com/magnoxemo/cardinal.git}"
-    : "${BRANCH:=devel}"
-    : "${DOWNLOAD_OPENMC_CROSS_SECTION:=false}"
-    : "${BUILD_METHOD:=opt}"
 
     #for build time compilation
 
@@ -50,11 +47,19 @@ From: ubuntu:24.04
         python3-yaml \
         python3-pkgconfig \
         curl \
-        nano
+        nano \
+        wget \
+        apt-utils
 
     mkdir -p /opt/cardinal-build && cd /opt/cardinal-build
 
-    git clone --branch $BRANCH $REPO
+    mkdir cross_sections && cd cross_sections && \
+    wget https://anl.box.com/shared/static/uhbxlrx7hvxqw27psymfbhi7bx7s6u6a.xz && \
+    tar xf uhbxlrx7hvxqw27psymfbhi7bx7s6u6a.xz && \
+    rm -f uhbxlrx7hvxqw27psymfbhi7bx7s6u6a.xz && \
+    cd ../
+
+    git clone https://github.com/magnoxemo/cardinal.git
     cd cardinal
 
     ./scripts/get-dependencies.sh && \
@@ -62,11 +67,8 @@ From: ubuntu:24.04
     ./contrib/moose/scripts/update_and_rebuild_libmesh.sh && \
     ./contrib/moose/scripts/update_and_rebuild_wasp.sh 
 
-    if [ ${DOWNLOAD_OPENMC_CROSS_SECTION} = "true" ]; then
-        ./scripts/download-openmc-cross-sections.sh
-    fi
 
-    make -j 12 METHOD=${BUILD_METHOD}
+    make -j 12 
 
     cd contrib/openmc && \
     python -m pip install .
