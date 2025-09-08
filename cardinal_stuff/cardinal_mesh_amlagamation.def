@@ -1,0 +1,69 @@
+Bootstrap: docker
+From: ubuntu:24.04
+
+%environment
+
+    #If I need to recompile it.  
+    export LIBMESH_JOBS=20
+    export MOOSE_JOBS=20
+    export JOBS=20
+    export NEKRS_HOME=/opt/cardinal-build/cardinal/install
+    export CC=mpicc
+    export CXX=mpicxx
+    export FC=mpif90
+
+%post
+
+    #for build time compilation
+
+    export LIBMESH_JOBS=20
+    export MOOSE_JOBS=20
+    export JOBS=20
+    export NEKRS_HOME=/opt/cardinal-build/cardinal/install
+    export CC=mpicc
+    export CXX=mpicxx
+    export FC=mpif90
+    export F90=mpif90
+    export F77=mpif77
+
+    apt-get update -y && \
+    apt-get install --yes \
+        git \
+        make \
+        autoconf \
+        automake \
+        libtool \
+        flex \
+        bison \
+        cmake \
+        g++ \
+        gfortran \
+        libhdf5-dev \
+        mpich \
+        libtirpc-dev \
+        python3 \
+        python3-pip \
+        python3-packaging \
+        python3-jinja2 \
+        python3-yaml \
+        python3-pkgconfig \
+        curl \
+        nano \
+        wget \
+        apt-utils
+
+    mkdir -p /opt/cardinal-build && cd /opt/cardinal-build
+
+    git clone --branch testing https://github.com/magnoxemo/cardinal.git
+    cd cardinal
+
+    ./scripts/get-dependencies.sh && \
+     cd contrib/openmc && \
+     git remote add magnoxemo https://github.com/magnoxemo/openmc.git || true && \
+     git fetch magnoxemo && \
+     git checkout -b mesh_tally_amalgamation magnoxemo/mesh_tally_amalgamation && \
+     cd ../../ && \
+     ./contrib/moose/scripts/update_and_rebuild_petsc.sh && \
+     ./contrib/moose/scripts/update_and_rebuild_libmesh.sh && \
+     ./contrib/moose/scripts/update_and_rebuild_wasp.sh && \
+     make -j 20 
