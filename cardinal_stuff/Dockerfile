@@ -1,6 +1,6 @@
 FROM ubuntu:24.04 
 
-ARG BRANCH_NAME="devel"
+ARG BRANCH_NAME="my_testing"
 ARG BUILD_METHOD="opt"
 
 RUN apt-get update --yes && \
@@ -35,24 +35,18 @@ RUN git clone --branch ${BRANCH_NAME} https://github.com/magnoxemo/cardinal.git
 WORKDIR /cardinal-build/cardinal
 
 ENV LIBMESH_JOBS=30
-
-RUN ./scripts/get-dependencies.sh && \
-    ./contrib/moose/scripts/update_and_rebuild_petsc.sh && \
-    ./contrib/moose/scripts/update_and_rebuild_libmesh.sh && \
-    ./contrib/moose/scripts/update_and_rebuild_wasp.sh && \
-    ./scripts/download-openmc-cross-sections.sh 
-
-
-WORKDIR /cardinal-build/cardinal
-
 ENV NEKRS_HOME=/cardinal-build/cardinal/install 
 ENV CC=mpicc 
 ENV CXX=mpicxx  
 ENV FC=mpif90 
- 
 
-RUN make -j12 METHOD=${BUILD_METHOD}
-
-RUN cd contrib/openmc &&\
-    pip install . --break-system-packages
-ENV OPENMC_CROSS_SECTIONS=$PWD/../cross_sections/endfb-viii-hdf5/cross_sections.xml
+RUN ./scripts/get-dependencies.sh && \
+    cd contrib/openmc && \
+    git remote add magnoxemo https://github.com/magnoxemo/openmc.git || true && \
+    git fetch magnoxemo && \
+    git checkout -b mesh_tally_amalgamation magnoxemo/mesh_tally_amalgamation && \
+    cd ../../ && \
+    ./contrib/moose/scripts/update_and_rebuild_petsc.sh && \
+    ./contrib/moose/scripts/update_and_rebuild_libmesh.sh && \
+    ./contrib/moose/scripts/update_and_rebuild_wasp.sh && \
+    make -j $nproc
