@@ -1,0 +1,2 @@
+alias see_jobs='squeue -u eahammed -o "%.18i %.9P %.30j %.8u %.2t %.10M %.6D %R"'
+alias watch="watch -n 1 squeue -u eahammed"
