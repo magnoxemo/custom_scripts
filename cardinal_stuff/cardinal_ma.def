@@ -11,7 +11,6 @@ From: ubuntu:24.04
     export CC=mpicc
     export CXX=mpicxx
     export FC=mpif90
-    export OPENMC_CROSS_SECTIONS=/opt/cardinal-build/cross_sections/endfb-viii.0-hdf5i/cross_sections.xml
 
 %post
 
@@ -24,6 +23,8 @@ From: ubuntu:24.04
     export CC=mpicc
     export CXX=mpicxx
     export FC=mpif90
+    export F90=mpif90
+    export F77=mpif77
 
     apt-get update -y && \
     apt-get install --yes \
@@ -53,22 +54,22 @@ From: ubuntu:24.04
 
     mkdir -p /opt/cardinal-build && cd /opt/cardinal-build
 
-    mkdir cross_sections && cd cross_sections && \
-    wget https://anl.box.com/shared/static/uhbxlrx7hvxqw27psymfbhi7bx7s6u6a.xz && \
-    tar xf uhbxlrx7hvxqw27psymfbhi7bx7s6u6a.xz && \
-    rm -f uhbxlrx7hvxqw27psymfbhi7bx7s6u6a.xz && \
-    cd ../
-
-    git clone https://github.com/magnoxemo/cardinal.git
+    git clone --branch mesh_tally_amalagamation https://github.com/magnoxemo/cardinal.git
     cd cardinal
 
-    ./scripts/get-dependencies.sh && \
-    ./contrib/moose/scripts/update_and_rebuild_petsc.sh && \
-    ./contrib/moose/scripts/update_and_rebuild_libmesh.sh && \
-    ./contrib/moose/scripts/update_and_rebuild_wasp.sh 
+    export ENABLE_NEK=false
+    export ENABLE_DAGMC=false
 
+     ./scripts/get-dependencies.sh
+     cd contrib/openmc
+     git remote add original https://github.com/magnoxemo/openmc.git
+     git pull original mesh_tally_amalgamation
+     git checkout original/mesh_tally_amalgamation
+     cd ../../
 
-    make -j 12 
+     ./contrib/moose/scripts/update_and_rebuild_petsc.sh
+     ./contrib/moose/scripts/update_and_rebuild_libmesh.sh 
+     ./contrib/moose/scripts/update_and_rebuild_wasp.sh 
+     
+    make -j 20
 
-    cd contrib/openmc && \
-    python -m pip install .
