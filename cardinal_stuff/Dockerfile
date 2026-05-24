@@ -1,6 +1,6 @@
 FROM ubuntu:24.04 
 
-ARG BRANCH_NAME="my_testing"
+ARG BRANCH_NAME="mesh_tally_amalagamation"
 ARG BUILD_METHOD="opt"
 
 RUN apt-get update --yes && \
