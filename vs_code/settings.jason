@@ -1,0 +1,155 @@
+{
+  // ─────────────────────────────────────────────
+  // TYPOGRAPHY
+  // ─────────────────────────────────────────────
+
+  "editor.fontFamily": "'SF Mono', 'Menlo', monospace",
+  "editor.fontSize": 13,
+  "editor.fontWeight": "400",
+  "editor.lineHeight": 1.5,
+  "editor.letterSpacing": 0,
+  "editor.fontLigatures": false,
+
+  "editor.cursorStyle": "line",
+  "editor.cursorBlinking": "blink",
+  "editor.cursorWidth": 2,
+
+  // ─────────────────────────────────────────────
+  // EDITOR SPACING
+  // ─────────────────────────────────────────────
+
+  "editor.padding.top": 8,
+  "editor.padding.bottom": 8,
+
+  "editor.minimap.enabled": false,
+  "editor.scrollbar.vertical": "auto",
+  "editor.scrollbar.horizontal": "auto",
+  "editor.overviewRulerBorder": false,
+
+  "editor.renderWhitespace": "selection",
+  "editor.renderControlCharacters": false,
+  "editor.renderLineHighlight": "line",
+  "editor.lineNumbers": "on",
+  "editor.lineNumbersMinChars": 3,
+
+  "editor.guides.indentation": false,
+  "editor.guides.bracketPairs": false,
+
+  // ─────────────────────────────────────────────
+  // CODE
+  // ─────────────────────────────────────────────
+
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": true,
+
+  "editor.wordWrap": "off",
+  "editor.bracketPairColorization.enabled": false,
+  "editor.matchBrackets": "always",
+
+  "editor.suggestSelection": "first",
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  },
+
+  // ─────────────────────────────────────────────
+  // FILES
+  // ─────────────────────────────────────────────
+
+  "explorer.compactFolders": false,
+  "explorer.sortOrder": "default",
+  "explorer.confirmDelete": true,
+  "explorer.confirmDragAndDrop": true,
+
+  "workbench.editor.showTabs": "multiple",
+  "workbench.editor.tabSizing": "fit",
+  "workbench.editor.tabActionLocation": "right",
+  "workbench.editor.showIcons": true,
+
+  // ─────────────────────────────────────────────
+  // XCODE-LIKE UI
+  // ─────────────────────────────────────────────
+
+  "workbench.activityBar.location": "default",
+  "workbench.sideBar.location": "left",
+  "workbench.statusBar.visible": true,
+  "workbench.panel.defaultLocation": "bottom",
+
+  "workbench.layoutControl.enabled": false,
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+
+  "breadcrumbs.enabled": true,
+
+  // ─────────────────────────────────────────────
+  // TERMINAL
+  // ─────────────────────────────────────────────
+
+  "terminal.integrated.fontFamily": "'SF Mono', 'Menlo', monospace",
+  "terminal.integrated.fontSize": 13,
+  "terminal.integrated.fontWeight": "400",
+  "terminal.integrated.lineHeight": 1.4,
+
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.cursorBlinking": true,
+
+  "terminal.integrated.scrollback": 5000,
+
+  // ─────────────────────────────────────────────
+  // SEARCH
+  // ─────────────────────────────────────────────
+
+  "search.exclude": {
+    "**/.git": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true
+  },
+
+  // ─────────────────────────────────────────────
+  // GIT
+  // ─────────────────────────────────────────────
+
+  "git.decorations.enabled": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+
+  // ─────────────────────────────────────────────
+  // FILE BEHAVIOR
+  // ─────────────────────────────────────────────
+
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+
+  // ─────────────────────────────────────────────
+  // WINDOW
+  // ─────────────────────────────────────────────
+
+  "window.titleBarStyle": "native",
+  "window.commandCenter": false,
+  "window.menuBarVisibility": "classic",
+
+  // ─────────────────────────────────────────────
+  // NOTIFICATIONS
+  // ─────────────────────────────────────────────
+
+  "workbench.notifications.showStatus": false,
+
+  // ─────────────────────────────────────────────
+  // THEME
+  // ─────────────────────────────────────────────
+
+  "workbench.colorTheme": "Xcode Default",
+  "workbench.iconTheme": "file-icons",
+  "extensions.ignoreRecommendations": true,
+  "editor.accessibilitySupport": "off",
+  "settingsSync.ignoredSettings": [
+
+  ]
+}
