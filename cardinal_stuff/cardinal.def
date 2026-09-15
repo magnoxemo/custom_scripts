@@ -54,18 +54,16 @@ From: ubuntu:24.04
 
     mkdir -p /opt/cardinal-build && cd /opt/cardinal-build
 
-    git clone --branch mesh_tally_amalagamation https://github.com/magnoxemo/cardinal.git
+    git clone  https://github.com/magnoxemo/cardinal.git
     cd cardinal
 
     export ENABLE_NEK=false
     export ENABLE_DAGMC=false
 
      ./scripts/get-dependencies.sh
-     cd contrib/openmc
-     git remote add original https://github.com/magnoxemo/openmc.git
-     git pull original mesh_tally_amalgamation
-     git checkout original/mesh_tally_amalgamation
-     cd ../../
+
+     export CPATH=/usr/include/eigen3:${CPATH:-}
+     export CPLUS_INCLUDE_PATH=/usr/include/eigen3:${CPLUS_INCLUDE_PATH:-}
 
      ./contrib/moose/scripts/update_and_rebuild_petsc.sh
      ./contrib/moose/scripts/update_and_rebuild_libmesh.sh 
