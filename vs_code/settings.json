@@ -2,7 +2,7 @@
   // ─────────────────────────────────────────────
   // TYPOGRAPHY
   // ─────────────────────────────────────────────
-
+  "chat.disableAIFeatures": true, 
   "editor.fontFamily": "'SF Mono', 'Menlo', monospace",
   "editor.fontSize": 13,
   "editor.fontWeight": "400",
